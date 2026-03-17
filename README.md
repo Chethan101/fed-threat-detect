@@ -1,2 +1,2 @@
 # fed-threat-detect
-Real-time cyber threat detection system using federated learning that identifies anomalies across distributed devices while preserving data privacy. It enables decentralized model training and improves security without sharing sensitive information.
+Real-Time Cyber Threat Detection using Federated Learning is an AI-based system that detects cyber threats across distributed devices without sharing sensitive data. It uses federated learning to train models collaboratively, ensuring privacy while identifying anomalies and potential attacks in real time. The system improves security by enabling decentralized, scalable, and efficient threat detection.
