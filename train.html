@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+{% block title %}Train — Federated Learning{% endblock %}
+{% block head %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+{% endblock %}
+
+{% block content %}
+<h2 class="page-title">Federated Training</h2>
+
+<!-- UPLOAD -->
+<div class="panel" id="uploadPanel">
+  <div class="panel-title accent">Dataset Upload</div>
+  <div class="upload-zone" id="dropZone">
+    <input type="file" id="fileInput" accept=".csv,.txt" style="display:none" onchange="handleFileUpload(this.files[0])">
+    <svg width="40" height="40" viewBox="0 0 40 40" fill="none" stroke="#00e5ff" stroke-width="1.5" style="margin-bottom:10px">
+      <rect x="4" y="8" width="32" height="26" rx="3"/>
+      <path d="M20 30V18M15 23l5-5 5 5"/>
+    </svg>
+    <div class="upload-title">Drop your CSV dataset here</div>
+    <div class="upload-sub">NSL-KDD, CIC-IDS, UNSW-NB15, or any numeric CSV</div>
+    <button class="btn btn-outline" style="margin-top:12px" onclick="document.getElementById('fileInput').click()">Browse File</button>
+  </div>
+
+  <div class="or-divider"><span>or</span></div>
+  <button class="btn btn-primary" style="width:100%" onclick="useDemo()">Use Built-In Demo Dataset (NSL-KDD style, 1000 samples)</button>
+
+  <div id="fileStatus" class="file-status hidden"></div>
+</div>
+
+<!-- TRAINING CONFIG — matches Fig 7.1 layout -->
+<div class="panel" id="configPanel" style="display:none">
+  <div class="panel-title accent">Training Configuration</div>
+  <div class="config-grid">
+    <div class="config-item">
+      <label>Target Column</label>
+      <select id="targetCol">
+        <option value="label">label</option>
+        <option value="attack_type">Attack_Type (Multi-class)</option>
+        <option value="class">class</option>
+        <option value="auto">Auto-detect</option>
+      </select>
+    </div>
+    <div class="config-item">
+      <label>Number of Clients</label>
+      <input type="number" id="nClients" value="3" min="2" max="10">
+    </div>
+    <div class="config-item">
+      <label>Federated Rounds</label>
+      <input type="number" id="nRounds" value="10" min="3" max="30">
+    </div>
+    <div class="config-item">
+      <label>Local Epochs</label>
+      <input type="number" id="nEpochs" value="10" min="1" max="20">
+    </div>
+  </div>
+  <button class="btn btn-primary" id="startBtn" onclick="startTraining()">
+    &#9654; Start Training
+  </button>
+</div>
+
+<!-- TRAINING PROGRESS — matches Fig 7.1 Training Progress section -->
+<div class="panel hidden" id="progressPanel">
+  <div class="panel-title accent">Training Progress</div>
+  <div class="progress-bar-wrap">
+    <div class="progress-bar-fill" id="progressFill" style="width:0%"></div>
+  </div>
+  <div id="progressStatus" class="progress-status">Initialising...</div>
+
+  <div class="log-box" id="logBox"></div>
+
+  <div class="rounds-list" id="roundsList"></div>
+</div>
+
+<!-- RESULTS — matches Fig 7.1 Training Results + Fig 7.2 Performance Metrics -->
+<div class="panel hidden" id="resultsPanel">
+  <div class="panel-title accent">Training Results</div>
+  <div class="results-metrics">
+    <div class="result-metric">
+      <div class="result-value accent" id="finalAcc">—</div>
+      <div class="result-label">FINAL ACCURACY</div>
+    </div>
+    <div class="result-metric">
+      <div class="result-value" id="trainTime">—</div>
+      <div class="result-label">TRAINING TIME</div>
+    </div>
+  </div>
+
+  <div class="panel-title accent" style="margin-top:20px">Performance Metrics (Accuracy vs Loss Curve)</div>
+  <div style="position:relative;height:280px;margin-top:12px">
+    <canvas id="perfChart"></canvas>
+  </div>
+
+  <div style="margin-top:20px;display:flex;gap:10px;flex-wrap:wrap">
+    <button class="btn btn-primary" onclick="goToDetect()">&#9654; Run Live Detection</button>
+    <button class="btn btn-outline" onclick="resetTraining()">Train Again</button>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script src="{{ url_for('static', filename='js/train.js') }}"></script>
+{% endblock %}
