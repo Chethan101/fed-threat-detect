@@ -1,8 +1,6 @@
 # Real-Time Cyber Threat Detection Using Federated Learning
 
-**Department of CSE (AI & ML) — Global Academy of Technology**  
-**Team:** Abhaya Adithya R · Chethan Kumar L · Chethan M · Chethan V  
-**Guide:** Dr. Lokanna Kadakolmath
+
 
 ---
 
